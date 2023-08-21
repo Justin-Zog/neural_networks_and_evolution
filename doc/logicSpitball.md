@@ -6,7 +6,7 @@ David Randall Miller's project and youtube video that can be found here:
 
 #### By Justin Herzog
 
-## Big Picture
+# Big Picture
 
 **"In order to understand the finer details of a program one needs to understand what the big
 picture is.  Imagine drawing a conifer tree with simple shapes. Just a green triangle for the 
@@ -14,7 +14,7 @@ needles and a brown square for the trunk."**
 
 **- Justin Herzog**
 
-### Part 1: Learn From Nature
+## Part 1: Learn From Nature
 
 From the big picture perspective we can look at the physical world around us.  What are
 the conditions necessary for **evolution and natural selection**?  I will list them below:
@@ -35,9 +35,9 @@ nature, those who avoid predators, find food, shelter themselves from nature, ov
 illness and injury, and have the skills necessary to find a mate are the ones who reproduce.
 Thus, only the best of traits are passed down from generation to generation.
 
-### Part 2: Attempting To Replicate Nature
+## Part 2: Attempting To Replicate Nature
 
-#### Replication
+### Replication
 
 &nbsp;&nbsp;&nbsp;&nbsp;Replication should be rather easy in our program. In order to replicate
 things we can simply use a class:
@@ -54,7 +54,7 @@ public class Creature
 
 Now we can just initialize a new 'Creature' object whenever we need.
 
-#### Blueprint
+### Blueprint
 
 &nbsp;&nbsp;&nbsp;&nbsp;Our creatures blueprint will be contained within a `Genome`.
 Each `Genome` will consist of 'DNA' or genes. A single `gene` will be represented by an 8 digit
@@ -66,19 +66,19 @@ Here is an example of a `Genome`:
     28e90f86 44bf3514 32430165 b19a8864
 ```
 
-#### Inherit Blueprint
+### Inherit Blueprint
 
 &nbsp;&nbsp;&nbsp;&nbsp;I would imagine that, just like the real world, this will differ 
 from artificial creature to artificial creature. I as the creator of these artificial creatures
 will give them different requirements as I see fit.
 
-#### Mutation
+### Mutation
 
 &nbsp;&nbsp;&nbsp;&nbsp;Every so often, a letter or two of a creature's `Genome` will be changed
 in a way that is random. I will set the odds for this per simulation for now, 1/1000 chance
 seems like a good statistic to go by.
 
-#### Selection Method:
+### Selection Method:
 
 &nbsp;&nbsp;&nbsp;&nbsp;This will differ not only from creature to creature, but also from
 simulation to simulation. 
@@ -87,9 +87,9 @@ simulation to simulation.
 for an ecosystem video game I will give special selection methods based on their role in the
 ecosystem. ie: If they can follow a pheromone trail, avoid a predator, find food, etc.
 
-### Part 3: Neural Networks
+## Part 3: Neural Networks
 
-#### Intro
+### Intro
 
 &nbsp;&nbsp;&nbsp;&nbsp;All information in this section is coming from a lecture by neuroscience professor 
 John H. Byrne, Ph.D. from McGovern Medical School. As of August 20th 2023, the lecture can be found at this link:
@@ -109,7 +109,7 @@ brain is hundreds of different organs each carrying out their own specific funct
 the creatures in our program should have 'different' neurons that perform different tasks. We
 will refer to a neuron in our program as a `node`.
 
-##### Basic Neuron Structure
+### Basic Neuron Structure
 
 &nbsp;&nbsp;&nbsp;&nbsp;For the purpose of this program, a neuron cell can essentially be defined
 based on three different aspects.
@@ -127,7 +127,7 @@ the synapse will connect to a dendrite and the neurons will be able to transfer 
 In our program, therefore, a `node` will also need *edges* going out of our `node`. I will call
 one of these edges an `output edge`. Each `node` will contain an array of `output edges`.
 
-##### Resting Potential and Action Potentials
+### Resting Potential and Action Potentials
 
 &nbsp;&nbsp;&nbsp;&nbsp;This interesting bit of information can be summed up in a short paragraph.
 There was an experiment done that essentially stuck two very tiny electrodes in a neuron. The first
@@ -151,7 +151,7 @@ We learn from the *frequency coding on the nervous system* that the
 greater the intensity of a stimulus, the greater the number of action potentials that
 are passed to the brain.
 
-##### How Nerve Cells Are Connected To Each Other
+### How Nerve Cells Are Connected To Each Other
 
 &nbsp;&nbsp;&nbsp;&nbsp;There are two different ways that neurons talk to each other.
 1. Excitatory connection
@@ -165,7 +165,7 @@ opposite to our battery, to the receiving neuron. Therefore, when an excitatory 
 triggered at the same time, or shortly after an inhibatory connection is triggered, it reduces
 the likelihood that the receiving neuron will fire off an action potential.
 
-##### MicroNetwork Motifs
+### MicroNetwork Motifs
 
 &nbsp;&nbsp;&nbsp;&nbsp;*MicroNetwork Motifs* is just a fancy word that means: despite the tens
 of thousands of different ways that neurons can connect to each other, there is a certain number
@@ -180,7 +180,7 @@ fire bursts again. He said that these type of rhythmic behaviors could be in cha
 To relate what I understood to our program, I think I will need to include a fourth type of `node`.
 This new `node` would send a 'value' through its `output edges` even if it has received no input.
 
-##### How can we incorporate this in our program?
+### How can we incorporate this in our program?
 
 &nbsp;&nbsp;&nbsp;&nbsp;Keep in mind that a neuron in our program is called a `node`. A neuron
 has `dendrites` that feed a 'charge' to the `soma`. If the charge given to the `soma` is high enough,
@@ -189,18 +189,20 @@ Similarly, our `node` has `input edges` that feed a 'charge' or value to the `no
 then takes the sum of the values given to it and sends them through an `activation function`.
 This value is then sent through the `node's` `output edges` and received by another `node`.
 
+# Small Picture
+
+## Types of Nodes
 
 
 
 
-
-## Random Thoughts
+# Random Thoughts
 
 This section is for random thoughts that do not correspond with any section I have created so far.
 
-### Dynamic Nodes
+## Dynamic Nodes
 
-##### Intro
+### Intro
 
 &nbsp;&nbsp;&nbsp;&nbsp;While thinking about David Miller's evolution and simulation video I came
 up with an idea. It spawned from me 'not liking' or rather thinking there had to be a better way
@@ -213,7 +215,7 @@ specific setup in its neural network that allowed it to somehow move around it. 
 not being very adaptable, especially if they could only move in one direction. In order to compensate for
 this inefficient method I thought of `Dynamic Nodes`.
 
-##### What is a Dynamic Node?
+### What is a Dynamic Node?
 
 &nbsp;&nbsp;&nbsp;&nbsp;A `dynamic node` is a node that, along with sending a numerical value (the charge),
 such as a `float`, it would also be able to send other critical information along the line. `Dynamic nodes`
@@ -234,13 +236,29 @@ the idea that I had of nodes in my head to evolve from 'move east', 'move random
 evolve into something more like 'move away from `x`' or 'move towards `x`'. `x` could be a certain
 pheromone, color, light-source, biome, etc. Hence, `dynamic nodes` were created.
 
-##### Figuring Out Which `x` A Dynamic Node Chooses
+### Figuring Out Which `x` A Dynamic Node Chooses
 
-##### How Is Data Passed From Node To Node?
+I suppose to find out which `x` a `dynamic output node` chooses, a `dynamic input node` and `dynamic hidden node`
+would also have to be created. In my head this looks like the input node collecting key information about what it is
+sensing and passing it down the line.
 
-### Sensing Predator and Prey
+I know that when I see something, that input is coming from my eyes. As of now, these creatures have no way of knowing
+what input triggered which output. Not ideal. To compensate for this, every input node will send a `reference tag` along
+with the `charge`. This `reference tag` will be passed down the chain so when an `output node` is activated it will
+know what `input` lead to it being activated. Obviously more information needs to be passed down, but that will differ
+depending on what kind of input is being sent. Here is a non-exhaustive list of potential additional data points that
+an input would send pass along:
+- Distance Stimulus: Information about the distance of the sensed stimulus.
+- Direction Stimulus: Information about the direction the stimulus is coming from.
+- Intensity Stimulus: Quantifies the intensity or strength of a stimulus. (Useful for smell or sound)
+- Type of Stimulus: Sends the type of stimulus being sent. (eg: scent, visual cue, sound)
+- Internal State: Info about the creature's internal state, such as hunger, fear, stress, etc.
 
-##### Sense Carnivore Node
+The additional stimulus could also affect the weight of the data being sent. For example, if a predator is far away from
+the creature it might only act cautiously instead of immediately running away. This could be caused by the additional
+weight (mimicking urgency) that the additional data points add to the 'charge' that is sent.
+
+### Sense Carnivore Node
 
 &nbsp;&nbsp;&nbsp;&nbsp;In my **What is a Dynamic Node?** section I mentioned a node that sensed genetic
 diversity. While this is a better way to 'predict' whether something is a predator or not, it is far from
@@ -248,9 +266,9 @@ optimal. This led to me thinking about how there is most likely going to be some
 given creatures `genome` that can determine whether it is a 'carnivore' or not. A creature would then only
 need to sense whether the creature is a carnivore, omnivore, or herbivore, to know if it is in danger.
  
-### Memory Persistence
+## Memory Persistence
 
-##### Intro
+### Intro
 
 &nbsp;&nbsp;&nbsp;&nbsp;As it stands right now, a creature, we'll call 'glom', could have a few sensory inputs
 that detect when a predator is in front of it and allows it to smell food. The glom could smell food and move
@@ -259,7 +277,7 @@ to activate. Now our glom has successfully moved away from a potential predator,
 input sensor says that there is no predator in front of him, is not activating and the glom again senses food.
 The poor glom would immediately turn back around just to discovery the predator again. How do we counteract this?
 
-##### Short Term Memory Banks
+### Short Term Memory Banks
 
 &nbsp;&nbsp;&nbsp;&nbsp;Implementing some sort of memory will provide the creatures with a sense of persistence 
 and continuity in their behaviors. This ensures that they remember recent events and avoid making immediate
@@ -268,9 +286,9 @@ contradictory choices, such as the glom above.
 Making it so each creature has a *memory buffer* could be beneficial. The buffer would store recent events
 or sensory inputs that are of interest (eg: detecting a predator, moving away from a threat). Each event in the buffer
 would also have some sort of memory duration. Less significant events might stay in the buffer for less time than more
-significant ones. 
+significant ones.
 
-##### Event Retrieval and Decision-making Influence
+### Event Retrieval and Decision-making Influence
 
 &nbsp;&nbsp;&nbsp;&nbsp;A potential solve for this is having events from the buffer act as 'temporary input nodes'.
 These 'temporary input nodes' as blasphemous as it may seem could feed directly into a 'permanent input node'.
@@ -291,13 +309,11 @@ this short term memory solve. It stems from these logic examples:
 5. Infinite loop occurs where the creature is constantly 'sensing a predator' and added a temporary node to the buffer
 
 **Unexpected Results from Dynamic Nodes**
-Another problem is that this temporary node would 'mess' with the dynamic nodes in unwanted ways. Using the sense
-predator node as an example. More than likely, an evolved species would trigger the 'move away from x' node when the
-sense predator node is activated. Now, the 'sense predator input node' would 'sense' a predator because of a temporary
-input node which would in turn, trigger the 'move away from x' node. However, now that the predator is not being sensed
-by the creature, 'move away from x' could cause the creature to move away from a pheromone or food, instead of the
-predator, as the predator would not be a valid `x`.
 
-
-
+&nbsp;&nbsp;&nbsp;&nbsp;Another problem is that this temporary node would 'mess' with the dynamic nodes in unwanted 
+ways. Using the sense predator node as an example. More than likely, an evolved species would trigger the 'move away 
+from x' node when the sense predator node is activated. Now, the 'sense predator input node' would 'sense' a predator 
+because of a temporary input node which would in turn, trigger the 'move away from x' node. However, now that the 
+predator is not being sensed by the creature, 'move away from x' could cause the creature to move away from a pheromone 
+or food, instead of the predator, as the predator would not be a valid `x`.
 
