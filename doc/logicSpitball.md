@@ -2,9 +2,12 @@ I thought it would be important to mention that this project was in large inspir
 David Randall Miller's project and youtube video that can be found here:
 >https://www.youtube.com/watch?v=N3tRFayqVtk
 
-# Neural Network and Creature Creation Logic
+# Neural Network and Creature Creation Logic 
 
 #### By Justin Herzog
+
+**"In this world, is the destiny of mankind controlled by some transcendental entity or law? Is it like the hand of God
+hovering above? At least it is true, that man has no control, even over his own will." -Void of the God Hand**
 
 # Big Picture
 
@@ -178,7 +181,8 @@ a so called *endogenous*, or bursting, behavior. Which means that in the absence
 these *endogenous* neurons will still fire bursts of action potentials, become silent again, then
 fire bursts again. He said that these type of rhythmic behaviors could be in charge of respiration.
 To relate what I understood to our program, I think I will need to include a fourth type of `node`.
-This new `node` would send a 'value' through its `output edges` even if it has received no input.
+This new `node` would send a 'value' through its `output edges` even if it has received no input. I
+will call this node an `oscillatory node`.
 
 ### How can we incorporate this in our program?
 
@@ -191,10 +195,102 @@ This value is then sent through the `node's` `output edges` and received by anot
 
 # Small Picture
 
-## Types of Nodes
+## Types of Static Nodes
 
+### Notes and Questions
 
+#### Should Output Nodes Send Output to Other Nodes?
 
+&nbsp;&nbsp;&nbsp;&nbsp;Originally, I thought it would be pretty stupid for output nodes to be able to connect to other
+nodes. For some reason, it just did not make sense to me. However, I started thinking about how I could create an output
+within my own body that creates an input. For example, if I decide to touch my skin, the output would be me moving my
+hand to touch my skin, the input would be the skin 'feeling' the sensation and starting a chain reaction. For this
+reason, I decided to allow output nodes to send output to other nodes.
+
+That analogy does not actually make much sense to me now... Maybe I'll have some sort of switch that will restrict, or 
+allow those connections to be made.
+
+### Abstract SuperClass Node
+Here is the abstract class that all nodes will inherit from:
+```
+public abstract class Node
+{
+    string NodeID { get; private set; }
+    public List<Node> InputNodes { get; private set; }
+    public List<Node> OutputNodes { get; private set; }
+    
+    public Node(string nodeID)
+    {
+        NodeID = nodeID;
+        InputNodes = new List<Node>();
+        OutputNodes = new List<Node>();
+    }
+    
+    public void AddInputNode(Node inputNode)
+    {
+        InputNodes.Add(inputNode);
+    }
+    
+    public void AddOutputNode(Node outputNode)
+    {
+        OutputNodes.Add(outputNode);
+    }
+}
+```
+
+### Input
+
+### Hidden
+
+### Output
+
+### Oscillatory
+
+Similar to the *endogenous* neurons mentioned above, the `oscillatory node` will be a subclass of `Node` and will look
+something like this:
+```
+public class OscillatoryNode : Node 
+{
+    // How many game steps the node takes to fire off
+    private float period;
+    private int currentStep;
+    
+    public OscillatoryNode(int period)
+    {
+        this.period = period;
+        this.currentStep = 0;
+    }
+    
+    public float sendOutput()
+    {
+        // Simulate sending the output signal
+        return 1.0f;
+    }
+    
+    public void Step()
+    {
+        currentStep++;
+        
+        if (currentStep >= period)
+        {
+            SendOutput();
+            currentStep = 0;
+        }
+    }
+}
+ ```
+
+## Types of Dynamic Nodes
+
+### Input
+
+### Hidden
+
+### Output
+
+### Oscillatory
+
+### Temporary Input
 
 # Random Thoughts
 
@@ -316,4 +412,15 @@ from x' node when the sense predator node is activated. Now, the 'sense predator
 because of a temporary input node which would in turn, trigger the 'move away from x' node. However, now that the 
 predator is not being sensed by the creature, 'move away from x' could cause the creature to move away from a pheromone 
 or food, instead of the predator, as the predator would not be a valid `x`.
+
+## Coordination and Cooperation
+
+### Intro
+
+&nbsp;&nbsp;&nbsp;&nbsp;This idea is likely for version 3 of this program. As it stands right now, all creatures are
+their own thing. They do not have any way to communicate with each other. I would not expect any of them to ever team 
+up or coordinate anything complex. That's when I thought of a very complex type of `dynamic output node`. Essentially 
+this output node would work almost like a short range radio, allowing creatures to communicate with each other. Having 
+an output node that sends signals to other nodes could help in achieving collective behaviors within the creatures. 
+For example, one creature's output could influence the behavior of nearby creatures.
 
