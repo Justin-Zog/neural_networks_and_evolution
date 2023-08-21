@@ -25,14 +25,22 @@ the conditions necessary for **evolution and natural selection**?  I will list t
 - **Replication**: Each creature must have a way to self-replicate. In the real world we see 
 this through all living things. A fungus might use spores, microscopic creatures may just
 duplicate. Humans, dogs, and other species require 2 species to combine their DNA to replicate.
+
+
 - **Blueprint**: Every creature that is born has to be constructed from a blueprint. In
 the real world DNA is carefully organized to create the genome.
+
+
 - **Inherit Blueprint**: The blueprint must be passed from the **replicator** to the
 **inheritor**. In other words, the blueprint must have a way to be inherited from
 generation to generation, parent to child, duplicator to duplicate.
+
+
 - **Mutation**: In order for evolution to be possible, the occasional mutation must occur.
 In nature, a single letter of a small part of the DNA may change, resulting in a different
 genome.
+
+
 - **Selection Method**: Who gets to reproduce and who does not. We see in our life and in
 nature, those who avoid predators, find food, shelter themselves from nature, overcome
 illness and injury, and have the skills necessary to find a mate are the ones who reproduce.
@@ -119,11 +127,15 @@ based on three different aspects.
 1. **Soma**: Also known as the *cell body*, the soma is where most of the general cell functions
 take place. In our program, a `node` must have some sort of soma-like functionality. In computer
 programs, the soma is often mimicked using **activation functions**. *More on these later.
+
+
 2. **Dendrite**: The dendrite is a branch-like structure that extends from the *soma*, (cell body).
 The dendrites are where the neurons receive connections. In our program, a `node` must have a
 dendrite-like structure.  This should not be too hard to implement, we can visualize this as
 a single point with lines, or *edges*, going into our `node`. I will call one of these an 
 `input edge`. Each `node` will contain an array of `input edges`.
+
+
 3. **Synapse**: The synapse is also a branch-like structure that extends from the neuron.
 It is at the synapses where information transfer occurs between two neurons. Traditionally,
 the synapse will connect to a dendrite and the neurons will be able to transfer information.
@@ -157,7 +169,9 @@ are passed to the brain.
 ### How Nerve Cells Are Connected To Each Other
 
 &nbsp;&nbsp;&nbsp;&nbsp;There are two different ways that neurons talk to each other.
+
 1. Excitatory connection
+
 2. Inhibitory connection
 
 &nbsp;&nbsp;&nbsp;&nbsp;The difference between these two connections can be explained using 
@@ -194,6 +208,68 @@ then takes the sum of the values given to it and sends them through an `activati
 This value is then sent through the `node's` `output edges` and received by another `node`.
 
 # Small Picture
+
+## Genome
+
+### Node Connection Rules
+
+&nbsp;&nbsp;&nbsp;&nbsp;Before choosing a method in which the genome will create a creature's neural network, we need to
+understand the rules behind which connections between nodes is allowed. The table below shows this information:
+
+|        | input  | hidden | output |
+|:------:|:------:|:------:|:------:|
+| input  |        |   *    |   *    |
+| hidden |        |   *    |   *    |
+| output |        |        |        |
+
+An asteriks shows that a connection from the type on the left, (the **source**), to the type on the top, (the **sink**) 
+can be made. An empty box shows that a connection between the **source** to the **sink** can not be made.
+
+This rules of this chart are largely based on nature. Although an uncommon and highly specialized connection called a 
+*feedback loop*, (input --> output --> input), does occasionally occur the cases are extremely specialized and removing
+these from the simulation will likely drive our artificial creatures to have a more natural behavior.
+
+### How Genomes Are Organized
+
+A `Genome` in our program will simply define neural connections. A single 8 digit hexadecimal number would result in a
+`NeuralNetwork` that has two nodes and one neural connection between the nodes. It is also important to emphasize that
+these neural connections are **one way**.
+
+Here is how the 8 digit hexadecimal number forms a connection between two nodes while still following the rules defined
+above:
+
+1. The 8 digit hexadecimal number is converted into 32 binary bits of data
+2. These bits are split into sections and these sections determine different characteristics of the connection
+
+This process will be demonstrated below using this 8 digit hexadecimal number: `28e90f86`
+
+**Convert the hexadecimal number to binary**: `0010 1000 1110 1001 0000 1111 1000 0110`
+
+**Split into sections**: `0 0101000 1 1101001 0000111110000110`
+
+Starting from the left, and going right:
+
+- `0` this single bit determines the **source** of the connection. This will be either an input node or a hidden node.
+This is because, referencing the table above, output nodes are incapable of being the source of a connection.
+
+
+- `0101000` this unsigned 7-bit binary number is converted to its base 10 number, which we will denote by`x`. In this case, 
+`x=40`. The second number we need is the `number of unique nodes of that type`, (input or hidden), which we'll denote 
+by `y`. We then use the **modulo** operator to determine which `node` to use: `x%y=node`
+
+
+- `1` this single bit determines the **sink** of the connection. This will be either a hidden node or an output node.
+This is because, referencing the table above, input nodes are incapable of being the sink
+
+
+- `1101001` similar to the first 7-bit field, this is also converted to a base 10 number. The same math is applied to
+determine which specific hidden or output `node` to connect the first node to.
+
+
+- `0000111110000110` a signed 16-bit value that is divided by an arbitrary constant. This number determines the weight
+of the edge.
+
+There we have it, a freshly wired connection between two "neurons"!
 
 ## Types of Static Nodes
 
@@ -345,9 +421,17 @@ know what `input` lead to it being activated. Obviously more information needs t
 depending on what kind of input is being sent. Here is a non-exhaustive list of potential additional data points that
 an input would send pass along:
 - Distance Stimulus: Information about the distance of the sensed stimulus.
+
+
 - Direction Stimulus: Information about the direction the stimulus is coming from.
+
+
 - Intensity Stimulus: Quantifies the intensity or strength of a stimulus. (Useful for smell or sound)
+
+
 - Type of Stimulus: Sends the type of stimulus being sent. (eg: scent, visual cue, sound)
+
+
 - Internal State: Info about the creature's internal state, such as hunger, fear, stress, etc.
 
 The additional stimulus could also affect the weight of the data being sent. For example, if a predator is far away from
