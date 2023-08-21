@@ -147,7 +147,7 @@ triggered by a just-threshold stimulus. However, the frequency of action potenti
 From the video we learn 'that the greater the magnitude of the stimulus, the greater is the number
 or frequency of action potentials. That's called *frequency coding on the nervous system*'.
 
-&nbsp;&nbsp;&nbsp;&nbsp;We learn from the *frequency coding on the nervous system* that the
+We learn from the *frequency coding on the nervous system* that the
 greater the intensity of a stimulus, the greater the number of action potentials that
 are passed to the brain.
 
@@ -189,8 +189,61 @@ Similarly, our `node` has `input edges` that feed a 'charge' or value to the `no
 then takes the sum of the values given to it and sends them through an `activation function`.
 This value is then sent through the `node's` `output edges` and received by another `node`.
 
+
+
+
+
+
+## Random Thoughts
+
+This section is for random thoughts that do not correspond with any section I have created so far.
+
+### Dynamic Nodes
+
+##### Intro
+
+&nbsp;&nbsp;&nbsp;&nbsp;While thinking about David Miller's evolution and simulation video I came
+up with an idea. It spawned from me 'not liking' or rather thinking there had to be a better way
+to implement some of his nodes. David's nodes, while they did work quite well for his project, are
+not very dynamic. For example, in his video when explaining certain nodes, he mentions how there is one
+that causes a creature to move west, one that causes the creature to move in a random direction, one
+that causes the creature to move south, east, north, etc. While it is good that this allowed the creature
+to move, when a creature hit a wall or some other obstacle it would have to 'luck out' by having a very
+specific setup in its neural network that allowed it to somehow move around it. This led to the creatures
+not being very adaptable, especially if they could only move in one direction. In order to compensate for
+this inefficient method I thought of `Dynamic Nodes`.
+
+##### What is a Dynamic Node?
+
+&nbsp;&nbsp;&nbsp;&nbsp;A `dynamic node` is a node that, along with sending a numerical value (the charge),
+such as a `float`, it would also be able to send other critical information along the line. `Dynamic nodes`
+could theoretically allow creatures to exhibit behaviors that are influenced by sensory input, leading to
+more sophisticated and adaptive responses to their environment than the `classic node` could.
+
+&nbsp;&nbsp;&nbsp;&nbsp;In my head I was trying to think of a solution to the problem of a creature being able to 'see' a 
+dangerous creature. How might it 'know' when something is dangerous or not? Coding real eyes and 
+trying to simulate that is out of the question. I then thought about how many wild animals have a tendency
+to run away from anything that 'looks' intimidating. 
+
+This led me to create an `input node` that would essentially be able to sense how close a 
+creatures `genome` is to ones own and fire a signal based on that. Ideally, this *senseGenome* node 
+would also tell the creature to either move *away* or *towards* the creature with a different `genome`. 
+In my mind, this would create a kind of 'cat and mouse' effect. Causing the predator to move towards 
+the prey, and the prey to move away from the predator. However, to effectively do this, I would need 
+the idea that I had of nodes in my head to evolve from 'move east', 'move random direction', etc, to 
+evolve into something more like 'move away from `x`' or 'move towards `x`'. `x` could be a certain
+pheromone, color, light-source, biome, etc. Hence, `dynamic nodes` were created.
+
+##### How Is Data Passed From Node To Node?
+
+### Sensing Predator and Prey
+
+##### Sense Carnivore Node
+
+&nbsp;&nbsp;&nbsp;&nbsp;In my **What is a Dynamic Node?** section I mentioned a node that sensed genetic
+diversity. While this is a better way to 'predict' whether something is a predator or not, it is far from
+optimal. This led to me thinking about how there is most likely going to be something specific in any
+given creatures `genome` that can determine whether it is a 'carnivore' or not. A creature would then only
+need to sense whether the creature is a carnivore, omnivore, or herbivore, to know if it is in danger.
  
-
-
-
 
