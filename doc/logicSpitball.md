@@ -91,8 +91,8 @@ ecosystem. ie: If they can follow a pheromone trail, avoid a predator, find food
 
 #### Intro
 
-&nbsp;&nbsp;&nbsp;&nbsp;All information in this section is coming from a lecture by neuroscience
-professor John H. Byrne, Ph.D. from McGovern Medical School. As of August 20th 2023, the lecture can be found at this link:
+&nbsp;&nbsp;&nbsp;&nbsp;All information in this section is coming from a lecture by neuroscience professor 
+John H. Byrne, Ph.D. from McGovern Medical School. As of August 20th 2023, the lecture can be found at this link:
 
 >https://nba.uth.tmc.edu/neuroscience/m/s1/introduction.html
 
@@ -220,8 +220,8 @@ such as a `float`, it would also be able to send other critical information alon
 could theoretically allow creatures to exhibit behaviors that are influenced by sensory input, leading to
 more sophisticated and adaptive responses to their environment than the `classic node` could.
 
-&nbsp;&nbsp;&nbsp;&nbsp;In my head I was trying to think of a solution to the problem of a creature being able to 'see' a 
-dangerous creature. How might it 'know' when something is dangerous or not? Coding real eyes and 
+&nbsp;&nbsp;&nbsp;&nbsp;In my head I was trying to think of a solution to the problem of a creature being able to 'see' 
+a dangerous creature. How might it 'know' when something is dangerous or not? Coding real eyes and 
 trying to simulate that is out of the question. I then thought about how many wild animals have a tendency
 to run away from anything that 'looks' intimidating. 
 
@@ -233,6 +233,8 @@ the prey, and the prey to move away from the predator. However, to effectively d
 the idea that I had of nodes in my head to evolve from 'move east', 'move random direction', etc, to 
 evolve into something more like 'move away from `x`' or 'move towards `x`'. `x` could be a certain
 pheromone, color, light-source, biome, etc. Hence, `dynamic nodes` were created.
+
+##### Figuring Out Which `x` A Dynamic Node Chooses
 
 ##### How Is Data Passed From Node To Node?
 
@@ -246,4 +248,56 @@ optimal. This led to me thinking about how there is most likely going to be some
 given creatures `genome` that can determine whether it is a 'carnivore' or not. A creature would then only
 need to sense whether the creature is a carnivore, omnivore, or herbivore, to know if it is in danger.
  
+### Memory Persistence
+
+##### Intro
+
+&nbsp;&nbsp;&nbsp;&nbsp;As it stands right now, a creature, we'll call 'glom', could have a few sensory inputs
+that detect when a predator is in front of it and allows it to smell food. The glom could smell food and move
+towards the food source when its 'predator sensor' activates and causes the output sensor 'move away from `x`' 
+to activate. Now our glom has successfully moved away from a potential predator, yay! However, now the glom's 
+input sensor says that there is no predator in front of him, is not activating and the glom again senses food.
+The poor glom would immediately turn back around just to discovery the predator again. How do we counteract this?
+
+##### Short Term Memory Banks
+
+&nbsp;&nbsp;&nbsp;&nbsp;Implementing some sort of memory will provide the creatures with a sense of persistence 
+and continuity in their behaviors. This ensures that they remember recent events and avoid making immediate
+contradictory choices, such as the glom above.
+
+Making it so each creature has a *memory buffer* could be beneficial. The buffer would store recent events
+or sensory inputs that are of interest (eg: detecting a predator, moving away from a threat). Each event in the buffer
+would also have some sort of memory duration. Less significant events might stay in the buffer for less time than more
+significant ones. 
+
+##### Event Retrieval and Decision-making Influence
+
+&nbsp;&nbsp;&nbsp;&nbsp;A potential solve for this is having events from the buffer act as 'temporary input nodes'.
+These 'temporary input nodes' as blasphemous as it may seem could feed directly into a 'permanent input node'.
+Information from the buffer would determine where the output from the temporary input node would go. The output would
+also be affected by *memory decay*. *Memory decay* would gradually reduce the influence of older events making it less
+likely that an older event would trigger and action potential in an input node. The events in the buffer could even be
+deleted as soon as the influence of the event reaches zero. This would ensure that recent events have a stronger impact 
+on decisions compared to distant past events.
+
+Adding `temporary input nodes` to the buffer is a great idea, however I can already see a few potential problems with 
+this short term memory solve. It stems from these logic examples:
+
+**Infinite Loop**
+1. 'sense predator' node activated
+2. 'temporary sense predator' node added to the buffer
+3. 'temporary sense predator' node activates 'sense predator' node
+4. 'temporary sense predator' node added to the buffer because of the original 'temporary sense predator node'
+5. Infinite loop occurs where the creature is constantly 'sensing a predator' and added a temporary node to the buffer
+
+**Unexpected Results from Dynamic Nodes**
+Another problem is that this temporary node would 'mess' with the dynamic nodes in unwanted ways. Using the sense
+predator node as an example. More than likely, an evolved species would trigger the 'move away from x' node when the
+sense predator node is activated. Now, the 'sense predator input node' would 'sense' a predator because of a temporary
+input node which would in turn, trigger the 'move away from x' node. However, now that the predator is not being sensed
+by the creature, 'move away from x' could cause the creature to move away from a pheromone or food, instead of the
+predator, as the predator would not be a valid `x`.
+
+
+
 
