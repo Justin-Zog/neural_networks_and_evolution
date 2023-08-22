@@ -1,8 +1,11 @@
-I thought it would be important to mention that this project was in large inspired by
+I thought it would be important to mention that this project was largely inspired by
 David Randall Miller's project and youtube video that can be found here:
 >https://www.youtube.com/watch?v=N3tRFayqVtk
 
-# Neural Network and Creature Creation Logic 
+Although, I do not agree with how many of things in his code are implemented, I do commend him for igniting a creative
+spark within me, and motivating me to create this project.
+
+# Neural Network and Creature Creation Logic
 
 #### By Justin Herzog
 
@@ -124,6 +127,7 @@ will refer to a neuron in our program as a `node`.
 
 &nbsp;&nbsp;&nbsp;&nbsp;For the purpose of this program, a neuron cell can essentially be defined
 based on three different aspects.
+
 1. **Soma**: Also known as the *cell body*, the soma is where most of the general cell functions
 take place. In our program, a `node` must have some sort of soma-like functionality. In computer
 programs, the soma is often mimicked using **activation functions**. *More on these later.
@@ -166,6 +170,9 @@ We learn from the *frequency coding on the nervous system* that the
 greater the intensity of a stimulus, the greater the number of action potentials that
 are passed to the brain.
 
+After learning about the *threshold* and *frequency coding on the nervous system*, we know we must
+implement something similar in the brains of our creatures. This is explained in the **Genome** section below.
+
 ### How Nerve Cells Are Connected To Each Other
 
 &nbsp;&nbsp;&nbsp;&nbsp;There are two different ways that neurons talk to each other.
@@ -182,6 +189,9 @@ opposite to our battery, to the receiving neuron. Therefore, when an excitatory 
 triggered at the same time, or shortly after an inhibatory connection is triggered, it reduces
 the likelihood that the receiving neuron will fire off an action potential.
 
+These different and distinct kind of connections must be implemented in our program. This is
+explained in the **Genome** section below.
+
 ### MicroNetwork Motifs
 
 &nbsp;&nbsp;&nbsp;&nbsp;*MicroNetwork Motifs* is just a fancy word that means: despite the tens
@@ -196,7 +206,8 @@ these *endogenous* neurons will still fire bursts of action potentials, become s
 fire bursts again. He said that these type of rhythmic behaviors could be in charge of respiration.
 To relate what I understood to our program, I think I will need to include a fourth type of `node`.
 This new `node` would send a 'value' through its `output edges` even if it has received no input. I
-will call this node an `oscillatory node`.
+will call this node an `oscillatory node`. It is a special type of input node that will fire off a
+signal after a set period of time.
 
 ### How can we incorporate this in our program?
 
@@ -226,8 +237,10 @@ An asteriks shows that a connection from the type on the left, (the **source**),
 can be made. An empty box shows that a connection between the **source** to the **sink** can not be made.
 
 This rules of this chart are largely based on nature. Although an uncommon and highly specialized connection called a 
-*feedback loop*, (input --> output --> input), does occasionally occur the cases are extremely specialized and removing
-these from the simulation will likely drive our artificial creatures to have a more natural behavior.
+*feedback loop*, (input --> output --> input), does occasionally occur the cases of them being used between input and 
+output functions exclusively are extremely specialized and removing these from the simulation will likely drive our 
+artificial creatures to have a more natural behavior. I am, however, allowing the hidden nodes to create feedback loops
+amongst themselves. This could lead to the emergence of unexpected or advantageous behaviors.
 
 ### How Genomes Are Organized
 
@@ -241,7 +254,7 @@ above:
 1. The 8 digit hexadecimal number is converted into 32 binary bits of data
 2. These bits are split into sections and these sections determine different characteristics of the connection
 
-This process will be demonstrated below using this 8 digit hexadecimal number: `28e90f86`
+This process will be demonstrated below using this 8 digit hexadecimal number, which we call a 'strand': `28e90f86`
 
 **Convert the hexadecimal number to binary**: `0010 1000 1110 1001 0000 1111 1000 0110`
 
@@ -255,7 +268,7 @@ This is because, referencing the table above, output nodes are incapable of bein
 
 - `0101000` this unsigned 7-bit binary number is converted to its base 10 number, which we will denote by`x`. In this case, 
 `x=40`. The second number we need is the `number of unique nodes of that type`, (input or hidden), which we'll denote 
-by `y`. We then use the **modulo** operator to determine which `node` to use: `x%y=node`
+by `y`. We then use the **modulo** operator to determine which `node` is defined by the 'strand': `x%y=node`
 
 
 - `1` this single bit determines the **sink** of the connection. This will be either a hidden node or an output node.
@@ -271,20 +284,123 @@ of the edge.
 
 There we have it, a freshly wired connection between two "neurons"!
 
+### Genome Nuances
+
+This section addresses questions that may arise when trying to decode the `Genome` into a `Neural Network`.
+
+Here are some questions that must be answered:
+
+- Can a `Neural Network` contain more than one of a specific type of output node?
+
+
+- Can a `Neural Network` contain more than one of a specific type of input node?
+
+
+- Can a `Neural Network` contain more than one of a specific type of hidden node?
+
+We will answer these questions here:
+
+#### Can A Neural Network Contain More Than One Of A Specific Type Of Output Node?
+
+&nbsp;&nbsp;&nbsp;&nbsp;Traditionally in nature, the answer to this question is no. For our program, this means that 
+if a creature has 25 unique output nodes, it will be able to have a maximum of 25 output nodes.
+
+#### Can A Neural Network Contain More Than One Of A Specific Type Of Input Node?
+
+&nbsp;&nbsp;&nbsp;&nbsp;In nature, we see examples of this all the time. We have two ears that can each hear and allow 
+us to determine what direction a sound came from for example. However, implementing this in our simulator would be 
+rather difficult and allowing more than one specific type of input node would most likely lead to inefficient organisms.
+For this reason, our program will only allow an organism to have one type of each input node.
+
+&nbsp;&nbsp;&nbsp;&nbsp;There is one exception to this, and that is the special case of the oscillatory node. I will further discuss this 
+exception in a separate section below.
+
+#### Can A Neural Network Contain More Than One Of A Specific Type Of Hidden Node?
+
+&nbsp;&nbsp;&nbsp;&nbsp;We absolutely see this in nature. In fact, having more hidden nodes can lead to more complex
+and advanced behaviors. However, having too many hidden nodes can be inhibitory and having too little can lead to
+an organism with hidden nodes that are being overwhelmed with far too many connections. We then have to choose how our
+`Neural Network` will handle these cases. On the one hand, we could opt to have more hidden nodes with fewer connections
+and risk an inefficient system. On the other, we could opt to have less hidden nodes with a greater amount of 
+connections. 
+
+This in turn raises a question, "**Where is the Goldilocks zone?**" Unfortunately, this question goes far beyond my
+understanding and I could not even begin to give an answer. The good news? I do not have to have an answer as Natural
+Selection within the simulator will answer the question for us. We do, however, have to solve one of the two problems 
+below:
+
+1. How can we dynamically determine the amount of hidden neurons an organism can have?
+
+
+2. How will a `Neural Network` decide a hidden node is 'overloaded' and therefore needs to create a new node?
+
+&nbsp;&nbsp;&nbsp;&nbsp;**David Miller's Attempt At Finding The Goldilocks Zone**:
+
+&nbsp;&nbsp;&nbsp;&nbsp;David Miller makes a weak attempt at solving question one in his program. In his program, the
+maximum amount of hidden nodes an organism can have is a variable. David defines that variable at the start of the
+simulation. While it is a potential solve, having a person set the maximum amount of nodes does not guarantee we will
+get creatures in the 'Goldilocks Zone'. While we could tinker with the number and iterate through many simulations to
+find what we believe to be the Goldilocks Zone, this seems inefficient and time-consuming.
+
+&nbsp;&nbsp;&nbsp;&nbsp;**My Attempt At Finding The Goldilocks Zone**:
+
+&nbsp;&nbsp;&nbsp;&nbsp;Instead of limiting the amount of hidden nodes an organism can have, I will allow the creature
+to have an unlimited amount of hidden nodes and instead put a limit, that is determined by the `Genome`, on how many
+connections each hidden node can have. Once this limit is reached, the `Neural Network` is forced to create a new
+hidden node. Hopefully, with natural selection, this will lead to a Goldilocks Zone of not too many hidden nodes, while
+also preventing hidden nodes from becoming overloaded.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**Using The Genome To Determine An Overload Limit**
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The first thing that I will mention is that with very small genomes, 
+this method puts no restrictions on the genome. This is because a hidden input **requires at least 2 connections** to 
+even be effective. That is, input ---> hidden ---> output. Therefore, this formula is only applied to organisms where 
+it is more plausible to have a hidden node with more than 5 or so inputs going into/out of it.
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If the genome is large enough, here is the method that will be used to 
+create dynamic boundaries on the hidden nodes:
+
+1. We will first construct a random `Genome`. An example `Genome`:
+`3f7a9cde a2b153f8 8e4d76f1 d0e9cba5 6f18d3b9 94e27c5a 1b5af896 c7d86e2a`
+
+
+2. We will then add the first digit of the first strand, the second digit of the second strand, the third digit of the
+third strand and the fourth digit of the fourth strand together. From our example we get: `3 + 2 + 4 + 9 = 18`. 
+We then divide this value by 60. The number `60` is derived from each digit being a 4-bit binary number whose total 
+equates to `15`. Hence, `15 * 4 = 60`. Doing this will give a floating point number between 0.0 and 1.0.
+
+
+3. Once we have this floating point number we will multiply it by the total amount of strands in the genome and convert
+it to an `int`. From our example we get `(18 * 8) / 60 = 2.4 ---> 2`.  We multiply by the total number of strands
+because that is the **maximum amount** of strands that could possibly flow into and out of a single hidden node. 
+Granted, a `Neural Network` constructed completely of hidden nodes that all have output edges heading toward the same 
+hidden node is almost impossible.
+
+
+4. Finally, we add the constant `2` to this number to give us the maximum amount of connections allowed on each hidden
+node. In our example, we would get, `2 + 2 = 4`.  The constant `2` comes from the fact that each hidden node requires
+at least 2 connections and if we were very unlikely, the `int` value derived from the genome has the possibility of 
+being `0`.
+
+
+5. Obviously we do not want the `Neural Network` to be required to max out the hidden nodes before creating a new one
+of the same type. This means we also need to determine a minimum amount of connections required to create a new hidden
+node of the same type.  For now, I am okay with this being set at the absolute minimum, 2. The reason behind this
+choice stems from how I envision the `Neural Network` will decode the `Genome` in the future. Here is the vision:
+While decoding, the amount of each type of hidden node is tracked somewhere as well as the connections that these nodes
+have. When a node has a viable amount of connections, (between the minimum and maximum), and a new connection is being
+made. The function creating the `Neural Network` would look at the first digit of the `strand` that is making the 
+connection and run it through a switch statement. I would then determine what digits would lead this switch statement 
+to cause the function to create a new hidden node of the same type to be created or which digits cause the function 
+to add the connection to the pre-existing hidden node. This allows me to toy with the odds that a new hidden node 
+will be created and fine tune it to my liking.
+
+
+#### Determining How Many Oscillatory Nodes An Organism Can Have Based On Its Genome
+
 ## Types of Static Nodes
 
 ### Notes and Questions
-
-#### Should Output Nodes Send Output to Other Nodes?
-
-&nbsp;&nbsp;&nbsp;&nbsp;Originally, I thought it would be pretty stupid for output nodes to be able to connect to other
-nodes. For some reason, it just did not make sense to me. However, I started thinking about how I could create an output
-within my own body that creates an input. For example, if I decide to touch my skin, the output would be me moving my
-hand to touch my skin, the input would be the skin 'feeling' the sensation and starting a chain reaction. For this
-reason, I decided to allow output nodes to send output to other nodes.
-
-That analogy does not actually make much sense to me now... Maybe I'll have some sort of switch that will restrict, or 
-allow those connections to be made.
 
 ### Abstract SuperClass Node
 Here is the abstract class that all nodes will inherit from:
