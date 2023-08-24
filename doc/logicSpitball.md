@@ -160,11 +160,10 @@ our program, is that when the battery gets large enough, the depolarization caus
 is sufficiently large enough to trigger an *action potential*, also known as a *spike* or an *impulse*.
 This action potential can be equated to the neuron firing off. In neuroscience the voltage at which
 the depolarization becomes sufficient enough to trigger an action potential is called the *threshold*.
-If a larger battery is used to generate a supra-threshold depolarization, a single action potential is
-still generated and the amplitude of that action potential is the same as the action potential
-triggered by a just-threshold stimulus. However, the frequency of action potentials is higher.
-From the video we learn 'that the greater the magnitude of the stimulus, the greater is the number
-or frequency of action potentials. That's called *frequency coding on the nervous system*'.
+If a larger battery is used to generate a supra-threshold depolarization, the amplitude of that action potential is 
+the same as the action potential triggered by a just-threshold stimulus. However, the frequency of action potentials 
+is higher. From the video we learn "that the greater the magnitude of the stimulus, the greater is the number
+or frequency of action potentials. That's called *frequency coding on the nervous system*".
 
 We learn from the *frequency coding on the nervous system* that the
 greater the intensity of a stimulus, the greater the number of action potentials that
@@ -417,7 +416,43 @@ it to an `int`. This `int` is the amount of oscillatory nodes that the organism 
 
 #### Determining The Threshold Of Each Node Based On Its Genome
 
-## Methods For Breeding Creatures
+- Input nodes do not have a threshold, so we do not have to worry about them.
+
+
+- Output and Hidden nodes threshold's will be determined by the `strand` when the node is first created.
+
+**Overview**
+
+My idea right now is to determine the threshold for each node when it is first created based on the `strand` that
+creates them.
+
+If the node was created from the first half of the hexadecimal strand, (a hidden node), then the first half of the
+strand will be used to determine the threshold. I will take the first 2 digits of the hexadecimal number and determine
+the base 10 value. It will be a number between 0 and 255. I will then divide this number by 255 to get a number between
+0.0 and 1.0. This floating point number is the threshold. If the sum of inputs results in a number equal to or greater
+than the threshold, then the neuron will fire off.
+
+#### Frequency Coding Within An Organism
+
+During the simulation, an organism may have both the 'move east' and 'move west' output nodes fire off at the same time.
+How are our creatures going to result this conflict of interest? Through the `Frequency Coding Algorithm`.
+
+Simply put, each output node in our program will use the exact same activation function. The result of the activation
+function will be divided by the threshold value of the output node. We will call this number the `frequency coding` 
+If the node hit its threshold value, this number will be greater than 1. The higher the output of the activation 
+function compared to the threshold, the higher this number will be.
+
+In each simulation step, any output node that was activated will send important data to a list. I believe the data will 
+look similar to this in the final product:
+
+`outputNodeID, frequencyCoding, type of output (motion, self defense))`
+
+The list of output nodes that were activated will be sent to a function that will determine what output to pick based
+off which output node had the greatest frequencyCoding for each type of output. The creature will then take this action.
+
+Implementing this frequency coding algorithm will help organisms with prioritizing which tasks to perform.
+
+## Methods For Organisms Reproducing
 
 ### Intro
 
@@ -431,18 +466,28 @@ all the rules and nuances of the genome?
 
 ### Solution 1:
 
-In heterosexual breeding, and this method should extend to any amount breeding (see *Studying How Reproduction Means 
-Affects Evolution* for more details), before creating the offspring's genome, both parents input and output nodes need
-to be pooled together.
+In heterosexual breeding, and this method should extend to any amount breeding (see *SStudying How Reproductive Means 
+Affects Evolution* for more details), we can use the below formula to stop stay within the rules of a valid `Genome`.
+The formula is specifically for heterosexual reproduction but can be easily adapted for tri, quad, and hexa sexual
+reproduction.
+
+1. Create four separate groups. Group 1 will contain the first half of parent 1's genome. Group 2 will contain the
+second half of parent 2's genome. Group 3 will contain the second half of parent 1's genome. Group 4 will contain the
+first half of parent 2's genome.
 
 
+2. Have a function parse through the first two groups `strands` and determine if there are too many input/output nodes
+of a specific type. If there are, the function will at random decide to use the strand from parent 1 or parent 2. If it
+chooses to use parent 1's input/output node, then a node from group 4 is added to the offsprings Genome to compensate 
+for the input node that was lost from parent 2. Vice versa if parent 2's input node is used. When choosing a node from
+these groups, the function ensures that the new node being introduced is not an input/output node that already exists
+on the new organism.
 
 
+3. Once all clashing `strands` have been taken care of, we have a new organism with a new genome and create the `Neural
+Network` and anything else need to create the new organism.
 
-
-
-
-## Studying How Reproduction Means Affects Evolution
+## Studying How Reproductive Means Affects Evolution
 
 ### Intro
 
