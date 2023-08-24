@@ -312,8 +312,8 @@ us to determine what direction a sound came from for example. However, implement
 rather difficult and allowing more than one specific type of input node would most likely lead to inefficient organisms.
 For this reason, our program will only allow an organism to have one type of each input node.
 
-&nbsp;&nbsp;&nbsp;&nbsp;There is one exception to this, and that is the special case of the oscillatory node. I will further discuss this 
-exception in a separate section below.
+&nbsp;&nbsp;&nbsp;&nbsp;There is one exception to this, and that is the special case of the oscillatory node. I will 
+further discuss this exception in a separate section below.
 
 #### Can A Neural Network Contain More Than One Of A Specific Type Of Hidden Node?
 
@@ -329,7 +329,7 @@ understanding and I could not even begin to give an answer. The good news? I do 
 Selection within the simulator will answer the question for us. We do, however, have to solve one of the two problems 
 below:
 
-1. How can we dynamically determine the amount of hidden neurons an organism can have?
+1. How can we dynamically determine the amount of hidden nodes an organism can have?
 
 
 2. How will a `Neural Network` decide a hidden node is 'overloaded' and therefore needs to create a new node?
@@ -366,8 +366,9 @@ create dynamic boundaries on the hidden nodes:
 
 2. We will then add the first digit of the first strand, the second digit of the second strand, the third digit of the
 third strand and the fourth digit of the fourth strand together. From our example we get: `3 + 2 + 4 + 9 = 18`. 
-We then divide this value by 60. The number `60` is derived from each digit being a 4-bit binary number whose total 
-equates to `15`. Hence, `15 * 4 = 60`. Doing this will give a floating point number between 0.0 and 1.0.
+We then divide this value by 60. The number `60` is derived from each hexadecimal digit representing a 4-bit binary 
+number whose total equates to `15`. Hence, `15 * 4 = 60`. Doing this will give a floating point number between 0.0 and 
+1.0.
 
 
 3. Once we have this floating point number we will multiply it by the total amount of strands in the genome and convert
@@ -395,8 +396,77 @@ to cause the function to create a new hidden node of the same type to be created
 to add the connection to the pre-existing hidden node. This allows me to toy with the odds that a new hidden node 
 will be created and fine tune it to my liking.
 
-
 #### Determining How Many Oscillatory Nodes An Organism Can Have Based On Its Genome
+
+An organism with too many oscillatory nodes firing signals would be an issue. This is because more than likely, the
+oscillatory node would cause an unwanted output node to activate, leading to less advantageous behavior. Because of
+this, the genome of the organism will limit the amount of oscillatory nodes allowed.
+
+A simple formula is going to be used to determine this. Here it is:
+
+1. The last four digits of the first strand in an organisms genome will be converted to base 10 and added up. 
+
+
+2. I will then normalize this number to be between 0.0 and 1.0 by dividing the sum from step one by 60. The number `60` 
+is derived from each hexadecimal digit representing a 4-bit binary number whose total equates to `15`. Hence, 
+`15 * 4 = 60`.
+
+
+3. Once we have this floating point number we will multiply it by the total amount of strands in the genome and convert
+it to an `int`. This `int` is the amount of oscillatory nodes that the organism is allowed to have.
+
+#### Determining The Threshold Of Each Node Based On Its Genome
+
+## Methods For Breeding Creatures
+
+### Intro
+
+Because each organism can only have a max of one of each specific type of input and output nodes, breeding creatures
+is more tricky than I first envisioned. For example, an easy way to create offspring from 2 parents would be to take
+the first half of one parents genome and combine it with the second half of the other parents genome. While this
+simple formula sounds great, it would not work. This is because any given type of input node can be found anywhere
+within the genome. If we used the aforementioned formula, there is a high probability that we will end up with organisms
+that have more than one input node of a specific type. So how do we successfully breed creatures while still following
+all the rules and nuances of the genome?
+
+### Solution 1:
+
+In heterosexual breeding, and this method should extend to any amount breeding (see *Studying How Reproduction Means 
+Affects Evolution* for more details), before creating the offspring's genome, both parents input and output nodes need
+to be pooled together.
+
+
+
+
+
+
+
+
+## Studying How Reproduction Means Affects Evolution
+
+### Intro
+
+At some point growing up, probably in school, I was taught that creatures that reproduce *asexually* are worse at
+adapted to changes in their environment (evolving) than creatures that reproduce *heterosexually*. I want to test this
+hypothesis with this project. After researching, I have found that this theory stems from the**Red Queen Hypothesis**:
+
+> (https://www.pbs.org/wgbh/evolution/library/01/5/l_015_03.html). 
+
+### The Study
+
+I will run a simulation where creatures reproduce asexually and evolve to their environment. 
+Then I will change the selection method slightly to see how long it takes the creatures to adapt to this change. I 
+will then do the exact same thing with creatures that reproduce heterosexually and track the results. 
+
+Additionally, I will add a new dimension to the *Red Queen Hypothesis* by introducing the concept of 'trisexual', 
+'quadsexual', and 'hexasexual' reproduction. In 'trisexual' reproduction, the genes of 3 parents will be split into 
+thirds then combined to produce a single offspring. The equivalent is true for 'quad' and 'hexa' sexual reproduction. 
+Four and Six parents respectively will be required to make one offspring. While these forms of reproduction do not
+exist in the world, (at least as far as I know), I am very interested to see if these fictitious forms of reproduction 
+would cause creatures to adapt faster/slower than heterosexual reproduction.
+
+For this study, the creatures in the simulation need a genome length that is divisible by 12. This is because 1, 2, 3,
+4, and 6 are all factors of 12.
 
 ## Types of Static Nodes
 
@@ -533,9 +603,10 @@ sensing and passing it down the line.
 I know that when I see something, that input is coming from my eyes. As of now, these creatures have no way of knowing
 what input triggered which output. Not ideal. To compensate for this, every input node will send a `reference tag` along
 with the `charge`. This `reference tag` will be passed down the chain so when an `output node` is activated it will
-know what `input` lead to it being activated. Obviously more information needs to be passed down, but that will differ
+know what `input`(s) lead to it being activated. Obviously more information needs to be passed down, but that will differ
 depending on what kind of input is being sent. Here is a non-exhaustive list of potential additional data points that
 an input would send pass along:
+
 - Distance Stimulus: Information about the distance of the sensed stimulus.
 
 
@@ -623,4 +694,25 @@ up or coordinate anything complex. That's when I thought of a very complex type 
 this output node would work almost like a short range radio, allowing creatures to communicate with each other. Having 
 an output node that sends signals to other nodes could help in achieving collective behaviors within the creatures. 
 For example, one creature's output could influence the behavior of nearby creatures.
+
+## Cool Node Ideas
+
+### Self Defense Nodes
+
+#### 'Shocker' Node
+
+&nbsp;&nbsp;&nbsp;&nbsp;This node is used in self-defense. I think it would be extremely funny if some of the creatures
+that are lower down in the food chain had an ability that essentially 'filled the air with an electric shock'. This
+shock would affect any creature in the area the shock fills. The creature that activated the shock remains unaffected.
+The shock would cause a random input node to send a full strength charge through the system. This would lead to funny
+scenarios where a predator has a weird and random jerk reaction, almost like a shock in the real world.
+
+## Future Updates
+
+### Ecosystem
+
+Add a part to the video that defines what is required for an ecosystem. It could be similar to when you explain what is
+required for evolution to occur.
+
+
 
