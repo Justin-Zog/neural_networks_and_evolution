@@ -452,41 +452,6 @@ off which output node had the greatest frequencyCoding for each type of output. 
 
 Implementing this frequency coding algorithm will help organisms with prioritizing which tasks to perform.
 
-## Methods For Organisms Reproducing
-
-### Intro
-
-Because each organism can only have a max of one of each specific type of input and output nodes, breeding creatures
-is more tricky than I first envisioned. For example, an easy way to create offspring from 2 parents would be to take
-the first half of one parents genome and combine it with the second half of the other parents genome. While this
-simple formula sounds great, it would not work. This is because any given type of input node can be found anywhere
-within the genome. If we used the aforementioned formula, there is a high probability that we will end up with organisms
-that have more than one input node of a specific type. So how do we successfully breed creatures while still following
-all the rules and nuances of the genome?
-
-### Solution 1:
-
-In heterosexual breeding, and this method should extend to any amount breeding (see *SStudying How Reproductive Means 
-Affects Evolution* for more details), we can use the below formula to stop stay within the rules of a valid `Genome`.
-The formula is specifically for heterosexual reproduction but can be easily adapted for tri, quad, and hexa sexual
-reproduction.
-
-1. Create four separate groups. Group 1 will contain the first half of parent 1's genome. Group 2 will contain the
-second half of parent 2's genome. Group 3 will contain the second half of parent 1's genome. Group 4 will contain the
-first half of parent 2's genome.
-
-
-2. Have a function parse through the first two groups `strands` and determine if there are too many input/output nodes
-of a specific type. If there are, the function will at random decide to use the strand from parent 1 or parent 2. If it
-chooses to use parent 1's input/output node, then a node from group 4 is added to the offsprings Genome to compensate 
-for the input node that was lost from parent 2. Vice versa if parent 2's input node is used. When choosing a node from
-these groups, the function ensures that the new node being introduced is not an input/output node that already exists
-on the new organism.
-
-
-3. Once all clashing `strands` have been taken care of, we have a new organism with a new genome and create the `Neural
-Network` and anything else need to create the new organism.
-
 ## Studying How Reproductive Means Affects Evolution
 
 ### Intro
@@ -759,5 +724,8 @@ scenarios where a predator has a weird and random jerk reaction, almost like a s
 Add a part to the video that defines what is required for an ecosystem. It could be similar to when you explain what is
 required for evolution to occur.
 
+### Odd Breeding
 
+Since Breeding is based entirely off of Genome Length, two creatures that are completely different species but have the
+same Genome length could breed. This could lead to some cool and wacky creatures haha.
 

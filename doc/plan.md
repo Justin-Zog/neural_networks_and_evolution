@@ -66,6 +66,7 @@ code. Instead, we can define a single Input Node class that uses a `Delegate` to
 #### Node
 
 The only reason this Superclass Node was made is that it allows values to be sent across Edge objects seamlessly.
+
 ```
 public abstract class Node
 {
@@ -81,6 +82,7 @@ public abstract class Node
 #### InputNode
 
 The InputNode class for version 1 will look something like this:
+
 ```
 public class InputNode : Node
 {
@@ -111,6 +113,7 @@ public class InputNode : Node
 #### OutputNode
 
 The OutputNode class for version 1 will look something like this:
+
 ```
 public class OutputNode : Node
 {
@@ -144,6 +147,7 @@ public class OutputNode : Node
 #### HiddenNode
 
 The HiddenNode class for version 1 will look something like this:
+
 ```
 public class HiddenNode : Node 
 {
@@ -185,6 +189,7 @@ public class HiddenNode : Node
 
 Edge Objects are primarily responsible for connecting two nodes together and sending important information between 
 those nodes.
+
 ```
 public class Edge
 {
@@ -204,6 +209,89 @@ public class Edge
     public void SetValue(float value)
     {
         Value = value * Weight;
+    }
+}
+```
+
+#### Genome
+
+The Genome Class is responsible for creating valid genomes of a specified length.
+
+```
+public class Genome
+{
+    public int Length { get; private set; }
+    public string[] Genes { get; private set; }
+    
+    // constructor for creating random creatures
+    public Genome(int length)
+    {
+        Length = length;
+        Genes = CreateGenome(Length);
+    }
+    
+    // constructor for creating creatures based on an already formed genome (ie: offspring)
+    public Genome(int length, string[] genes)
+    {
+        Length = length;
+        Genes = genes;
+    }
+    
+    private Gene[] CreateGenome(int length)
+    {
+        string[] genes = new string[length];
+        
+        // Create the Genome here.
+    
+        return genes;
+    }
+}
+```
+
+#### BreedingManager
+
+This is a utility class that contains the methods and logic for breeding creatures.
+
+```
+public static class BreedingManager
+{
+    // Asexual
+    public static Genome BreedGenomes(Genome parent)
+    {
+        Copies the Genome with a chance for mutation.
+    }
+    
+    // Heterosexual
+    public static Genome BreedGenomes(Genome parent1, Genome parent2)
+    {
+        string[] genes = new string[parent1.Length];
+        
+        Take the first half of parent1's genome and add it to genes
+        Take the last half of parent2's genome and add it to genes
+        Genome offspringGenome = new Genome(genes.length, genes);
+        
+        return offspringGenome;
+    }
+    
+    // Tri-sexual
+    public static Genome BreedGenomes(Genome parent1, Genome parent2, Genome parent3)
+    {
+        Add the logic for breeding here
+        return Genome;
+    }
+    
+    // Quad-sexual
+    public static Genome BreedGenomes(Genome parent1, Genome parent2, Genome parent3, Genome parent4)
+    {
+        Add the logic for breeding here
+        return Genome;
+    }
+    
+    // Hexa-sexual
+    public static Genome BreedGenomes(Genome parent1, Genome parent2, Genome parent3, Genome parent4, Genome parent5, Genome parent6)
+    {
+        Add the logic for breeding here
+        return Genome;
     }
 }
 ```
