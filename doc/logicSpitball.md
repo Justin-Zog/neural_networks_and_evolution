@@ -395,42 +395,22 @@ to cause the function to create a new hidden node of the same type to be created
 to add the connection to the pre-existing hidden node. This allows me to toy with the odds that a new hidden node 
 will be created and fine tune it to my liking.
 
-#### Determining How Many Oscillatory Nodes An Organism Can Have Based On Its Genome
-
-An organism with too many oscillatory nodes firing signals would be an issue. This is because more than likely, the
-oscillatory node would cause an unwanted output node to activate, leading to less advantageous behavior. Because of
-this, the genome of the organism will limit the amount of oscillatory nodes allowed.
-
-A simple formula is going to be used to determine this. Here it is:
-
-1. The last four digits of the first strand in an organisms genome will be converted to base 10 and added up. 
-
-
-2. I will then normalize this number to be between 0.0 and 1.0 by dividing the sum from step one by 60. The number `60` 
-is derived from each hexadecimal digit representing a 4-bit binary number whose total equates to `15`. Hence, 
-`15 * 4 = 60`.
-
-
-3. Once we have this floating point number we will multiply it by the total amount of strands in the genome and convert
-it to an `int`. This `int` is the amount of oscillatory nodes that the organism is allowed to have.
-
 #### Determining The Threshold Of Each Node Based On Its Genome
 
-- Input nodes do not have a threshold, so we do not have to worry about them.
+- Input and Hidden nodes do not have a threshold, so we do not have to worry about them.
 
 
-- Output and Hidden nodes threshold's will be determined by the `strand` when the node is first created.
+- An output node's threshold will be determined by the `strand` when the node is first created.
 
 **Overview**
 
 My idea right now is to determine the threshold for each node when it is first created based on the `strand` that
 creates them.
 
-If the node was created from the first half of the hexadecimal strand, (a hidden node), then the first half of the
-strand will be used to determine the threshold. I will take the first 2 digits of the hexadecimal number and determine
-the base 10 value. It will be a number between 0 and 255. I will then divide this number by 255 to get a number between
-0.0 and 1.0. This floating point number is the threshold. If the sum of inputs results in a number equal to or greater
-than the threshold, then the neuron will fire off.
+I will take the last 4 digits of the hexadecimal number and determine the base 10 value. It will be a number between 
+0 and 65535. I will then divide this number by 65535 to get a number between 0.0 and 1.0. This floating point number is 
+the threshold. If the sum of inputs results in a number equal to or greater than the threshold, then the neuron will 
+fire off.
 
 #### Frequency Coding Within An Organism
 
