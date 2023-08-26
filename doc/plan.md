@@ -63,8 +63,8 @@ be created for Input, Hidden, and Output nodes.
 
 Using delegates will save lots of headaches and time in the future. Every input, hidden and output node are essentially
 the same. They just use different functions to determine the input value, activation values, and what the creature does.
-We could just make different input node classes based on the different inputs, but that would lead to tons of duplicated
-code. Instead, we can define a single Input Node class that uses a `Delegate` to determine the function it uses.
+We could make different input node classes based on the different inputs, but that would lead to tons of duplicated
+code. Instead, we can simply define a single Input Node class that uses a `Delegate` to determine the function it uses.
 
     // This delegate can store any method that has a return type of 'float'.
     // By defining the method parameter with 'params object[] parameters',
@@ -82,11 +82,11 @@ information to be sent across Edges
 ```
 public abstract class Node
 {
-    public int Id {get; private set; }
+    public int id { get; private set; }
     
     public Node(int id)
     {
-        Id = id;
+        this.id = id;
     }
 }
 ```
@@ -98,24 +98,24 @@ The InputNode class for version 1 will look something like this:
 ```
 public class InputNode : Node
 {
-    public Edge[] OutputEdges { get; private set; }
+    public Edge[] outputEdges { get; private set; }
     // A delegate that stores the function that determines the value then node will spit out.
-    public InputFunction InputFunction { get; private set; }
+    public InputFunction inputFunction { get; private set; }
 
     public InputNode(int id) : base(id)
     {
-        OutputEdges = new Edge[0];
-        InputFunction = InputFunctions.GetFunction(Id); // The file that contains all input node functions
+        this.outputEdges = new Edge[0];
+        this.inputFunction = InputFunctions.GetFunction(this.id); // The file that contains all input node functions
     }
     
-    public void AddOutputEdge(Edge edge)
+    public void addOutputEdge(Edge edge)
     {
         Adds a new output edge to the array.
         This will create a new array with one additional slot for the new output edge 
         and replace the old array with the new one.
     }
     
-    public void SendOutput()
+    public void sendOutput()
     {
         Takes the result of inputFunction and sends it to all the OutputEdges.
     }
@@ -129,25 +129,25 @@ The OutputNode class for version 1 will look something like this:
 ```
 public class OutputNode : Node
 {
-    public float Threshold { get; private set; }
-    public Edge[] InputEdges { get; private set; }
+    public float threshold { get; private set; }
+    public Edge[] inputEdges { get; private set; }
     // A delegate that stores the function to be carried out by the output node.
-    public OutputFunction OutputFunction { get; private set; }
+    public OutputFunction outputFunction { get; private set; }
     
     public OutputNode(int id) : base(id)
     {
-        InputEdges = new Edge[0];
-        OutputFunction = OutputFunctions.GetFunction(Id); // The file that contains all output node functions
+        this.inputEdges = new Edge[0];
+        this.outputFunction = OutputFunctions.GetFunction(this.id); // The file that contains all output node functions
     }
     
-    public void AddInputEdge(Edge edge)
+    public void addInputEdge(Edge edge)
     {
         Adds a new input edge to the array.
         This will create a new array with one additional slot for the new input edge
         and replace the old array with the new one.
     }
     
-    public float CalculateFrequencyCoding()
+    public float calculateFrequencyCoding()
     {
         Sends the sum of all values from InputEdges into the activation function (ReLU)
         The frequencyCoding is then calculated. (Activation function's result divided by the threshold value)
@@ -163,33 +163,33 @@ The HiddenNode class for version 1 will look something like this:
 ```
 public class HiddenNode : Node 
 {
-    public Edge[] InputEdges { get; private set; }
-    public Edge[] OutputEdges { get; private set; }
+    public Edge[] inputEdges { get; private set; }
+    public Edge[] outputEdges { get; private set; }
     // A delegate that stores the activation function to be used by the hidden node.
-    public ActivationFunction ActivationFunction { get; private set; }
+    public ActivationFunction activationFunction { get; private set; }
     
     public HiddenNode(int id) : base(id)
     {
-        InputEdges = new Edge[0];
-        OutputEdges = new Edge[0];
-        ActivationFunction = ActivationFunctions.GetFunction(Id); // The file that contains all the activation functions
+        this.inputEdges = new Edge[0];
+        this.outputEdges = new Edge[0];
+        this.activationFunction = ActivationFunctions.GetFunction(this.id); // The file that contains all the activation functions
     }
     
-    public void AddInputEdge(Edge edge)
+    public void addInputEdge(Edge edge)
     {
         Adds a new input edge to the array.
         This will create a new array with one additional slot for the new input edge
         and replace the old array with the new one.
     }
     
-    public void AddOutputEdge(Edge edge)
+    public void addOutputEdge(Edge edge)
     {
         Adds a new output edge to the array.
         This will create a new array with one additional slot for the new output edge 
         and replace the old array with the new one.
     }
     
-    public float SendOutput()
+    public float sendOutput()
     {
         Sums up the values from the InputEdges and puts the sum through the activation function.
         Then sends that value to each of the OutputEdges
@@ -205,22 +205,22 @@ those nodes.
 ```
 public class Edge
 {
-    public float Weight { get; private set; }
-    public Node Source { get; private set; }
-    public Node Sink { get; private set; }
-    public float Value { get; set; }
+    public float weight { get; private set; }
+    public Node source { get; private set; }
+    public Node sink { get; private set; }
+    public float value { get; set; }
     
     public Edge(Node source, Node sink, float weight)
     {
-        Source = source;
-        Sink = sink;
-        Weight = weight;
-        Value = 0.0f;
+        this.source = source;
+        this.sink = sink;
+        this.weight = weight;
+        this.value = 0.0f;
     }
     
-    public void SetValue(float value)
+    public void setValue(float value)
     {
-        Value = value * Weight;
+        this.value = value * this.weight;
     }
 }
 ```
@@ -232,24 +232,24 @@ The Genome Class is responsible for creating valid genomes of a specified length
 ```
 public class Genome
 {
-    public int Length { get; private set; }
-    public string[] Genes { get; private set; }
+    public int length { get; private set; }
+    public string[] genes { get; private set; }
     
     // constructor for creating random creatures
     public Genome(int length)
     {
-        Length = length;
-        Genes = CreateGenome(Length);
+        this.length = length;
+        this.genes = CreateGenome(Length);
     }
     
     // constructor for creating creatures based on an already formed genome (ie: offspring)
     public Genome(int length, string[] genes)
     {
-        Length = length;
-        Genes = genes;
+        this.length = length;
+        this.genes = genes;
     }
     
-    private Gene[] CreateGenome(int length)
+    private Gene[] createGenome(int length)
     {
         string[] genes = new string[length];
         
@@ -268,13 +268,13 @@ This is a utility class that contains the methods and logic for breeding creatur
 public static class BreedingManager
 {
     // Asexual
-    public static Genome BreedGenomes(Genome parent)
+    public static Genome breedGenomes(Genome parent)
     {
         Copies the Genome with a chance for mutation.
     }
     
     // Heterosexual
-    public static Genome BreedGenomes(Genome parent1, Genome parent2)
+    public static Genome breedGenomes(Genome parent1, Genome parent2)
     {
         string[] genes = new string[parent1.Length];
         
@@ -286,21 +286,21 @@ public static class BreedingManager
     }
     
     // Tri-sexual
-    public static Genome BreedGenomes(Genome parent1, Genome parent2, Genome parent3)
+    public static Genome breedGenomes(Genome parent1, Genome parent2, Genome parent3)
     {
         Add the logic for breeding here
         return Genome;
     }
     
     // Quad-sexual
-    public static Genome BreedGenomes(Genome parent1, Genome parent2, Genome parent3, Genome parent4)
+    public static Genome breedGenomes(Genome parent1, Genome parent2, Genome parent3, Genome parent4)
     {
         Add the logic for breeding here
         return Genome;
     }
     
     // Hexa-sexual
-    public static Genome BreedGenomes(Genome parent1, Genome parent2, Genome parent3, Genome parent4, Genome parent5, Genome parent6)
+    public static Genome breedGenomes(Genome parent1, Genome parent2, Genome parent3, Genome parent4, Genome parent5, Genome parent6)
     {
         Add the logic for breeding here
         return Genome;
@@ -318,7 +318,7 @@ network must be made before creating the pseudocode class.
 
 **Using the Genome To Determine An Overload Limit on Hidden Nodes**:
 
-If Genome.Length > 12 this formula will be applied:
+If `Genome.Length > 12` this formula will be applied:
 
 1. Take the first digit of the first strand, the second digit of the second strand, the third digit of the third strand 
 and the fourth digit of the fourth strand and combine them together to create a 4-digit hexadecimal number.
@@ -331,7 +331,7 @@ and the fourth digit of the fourth strand and combine them together to create a 
 3. Multiply the floating point number by the Genome length and convert it to an int. `(int) (x * Genome.Length)`
 
 
-4. Add the constant `2` to this number and that will give us the maximum connections allowed on each hidden node.
+4. Add the constant `2` to this number, this will give us the maximum connections allowed on each hidden node.
 The constant `2` comes from the fact that each hidden node requires at least 2 connections and if we were very unlucky,
 the `int` value derived from the Genome has the possibility of being `0`.
 
@@ -380,17 +380,17 @@ follow these streamlined steps to determine when to create a new hidden node of 
 
 You may have noticed the `notHookedUpInAViableWay` parameter on one of the else if statements. This is a check to see
 if a hidden node is connected to both an input and output node in some way. If the hidden node is not, it is essentially
-useless as any connections leading to it won't lead anywhere. Here is a pseudocode recursive function I made that 
+useless as any connections leading to it won't lead anywhere useful. Here is a pseudocode recursive function I made that 
 should check to see if a hidden node is connected to an input node. The function should also be very easy to alter to 
 check if the hidden node is connected to an output node.
 
 ```
-public bool IsConnectedToInputNode(Node node)
+public bool isConnectedToInputNode(Node node)
 {
     return IsConnectedToInputNode(new List<Node>(), node);
 }
 
-private bool IsConnectedToInputNode(List<Node> previousNodes, Node currentNode)
+private bool isConnectedToInputNode(List<Node> previousNodes, Node currentNode)
 {
     // Check if the path was a feedback loop
     if (previousNodes.Contains(currentNode))
@@ -410,7 +410,7 @@ private bool IsConnectedToInputNode(List<Node> previousNodes, Node currentNode)
     // Recursively check the input edges
     foreach (var edge in currentNode.InputEdges)
     {
-        if (IsConnectedToInputNode(previousNodes, edge.Source))
+        if (isConnectedToInputNode(previousNodes, edge.Source))
         {
             return true;
         }
@@ -461,7 +461,26 @@ public static class NeuralNetworkFactory
 }
 ```
 
+#### Creature
 
+This class is responsible for storing important information about a creature. In version 1 of the project it will
+look something like this.
+
+```
+public class Creature
+{
+    public Coord location { get; private set; }
+    public Genome genome { get; private set; }
+    public NeuralNetwork brain { get; private set; }
+    
+    public Creature()
+    {
+        this.location = GenerateValidLocation();
+        this.genome = new Genome();
+        this.brain = new NeuralNetwork();
+    }
+}
+```
 
 
 ## Phase 3: Implementation
