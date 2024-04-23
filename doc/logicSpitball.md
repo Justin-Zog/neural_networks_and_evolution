@@ -709,3 +709,15 @@ required for evolution to occur.
 Since Breeding is based entirely off of Genome Length, two creatures that are completely different species but have the
 same Genome length could breed. This could lead to some cool and wacky creatures haha.
 
+
+
+
+
+
+
+
+### Different Selection Criteria
+
+Having a time trial and seeing which is average. Then giving the creatures a greater chance to reproduce if they are above average.
+
+**Mean Field Average/Dependent**
